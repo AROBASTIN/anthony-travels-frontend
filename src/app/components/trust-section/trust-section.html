@@ -1,0 +1,72 @@
+<section class="trust-wrap" id="why-choose-us">
+  <div class="container">
+    <!-- Statistics Strip -->
+    <div class="stats-grid glass-panel">
+      <div class="stat-card" *ngFor="let stat of stats">
+        <span class="stat-number">{{stat.value}}</span>
+        <span class="stat-label">{{stat.label}}</span>
+      </div>
+    </div>
+
+    <!-- Core Brand Pillars -->
+    <div class="section-header">
+      <h2>Why Choose Anthony Travels</h2>
+      <p>Redefining private road transport across India with trust, safety, and transparency.</p>
+    </div>
+
+    <div class="props-grid">
+      <div class="prop-card" *ngFor="let item of props">
+        <div class="prop-icon-wrapper">
+          <!-- Mini SVGs as clean inline illustrations for premium feel -->
+          <svg *ngIf="item.icon === 'driver'" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="8.5" cy="7" r="4"></circle>
+            <polyline points="17 11 19 13 23 9"></polyline>
+          </svg>
+          <svg *ngIf="item.icon === 'gps'" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          <svg *ngIf="item.icon === 'support'" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+          </svg>
+          <svg *ngIf="item.icon === 'price'" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="1" x2="12" y2="23"></line>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+          </svg>
+          <svg *ngIf="item.icon === 'family'" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            <polyline points="9 11 11 13 15 9"></polyline>
+          </svg>
+          <svg *ngIf="item.icon === 'booking'" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+        </div>
+        <div class="prop-info">
+          <h3>{{item.title}}</h3>
+          <p>{{item.desc}}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Security & Safety Standards Certifications -->
+    <div class="certifications-wrap glass-panel">
+      <div class="cert-header">
+        <span class="shield-badge">🛡️</span>
+        <h3>Safety & Tourism Affiliations</h3>
+      </div>
+      <div class="cert-grid">
+        <div class="cert-card" *ngFor="let cert of certifications">
+          <div class="cert-check">✓</div>
+          <div class="cert-info">
+            <span class="cert-name">{{cert.name}}</span>
+            <span class="cert-detail">{{cert.detail}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

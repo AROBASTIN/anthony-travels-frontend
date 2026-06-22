@@ -1,0 +1,85 @@
+.faq-wrap {
+  background: var(--bg-canvas);
+}
+
+.faq-container {
+  max-width: 800px !important;
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.faq-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: var(--transition-smooth);
+}
+
+.faq-item:hover {
+  border-color: rgba(255, 107, 0, 0.2);
+  box-shadow: 0 4px 15px rgba(11, 30, 54, 0.03);
+}
+
+.faq-question {
+  width: 100%;
+  background: transparent;
+  border: none;
+  padding: 20px 24px;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary-navy);
+  cursor: pointer;
+  outline: none;
+}
+
+.chevron-wrapper {
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.chevron-icon {
+  transition: transform 0.3s ease;
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s cubic-bezier(0, 1, 0, 1);
+  padding: 0 24px;
+  background: #FCFBF9;
+}
+
+.faq-answer p {
+  padding-bottom: 20px;
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* Open states */
+.faq-item.open {
+  border-color: var(--accent-orange);
+}
+
+.faq-item.open .chevron-icon {
+  transform: rotate(180deg);
+  color: var(--accent-orange);
+}
+
+.faq-item.open .faq-answer {
+  max-height: 200px;
+  transition: max-height 0.3s cubic-bezier(1, 0, 1, 0);
+}

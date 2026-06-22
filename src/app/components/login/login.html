@@ -1,0 +1,164 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h2>Anthony <span class="accent">Travels</span></h2>
+      <p class="subtitle">Premium Outstation & City Cabs</p>
+    </div>
+
+    <!-- Toggle Tabs -->
+    <div class="auth-tabs">
+      <button 
+        class="tab-btn" 
+        [class.active]="isLoginMode()" 
+        (click)="isLoginMode.set(true)">
+        Login
+      </button>
+      <button 
+        class="tab-btn" 
+        [class.active]="!isLoginMode()" 
+        (click)="isLoginMode.set(false)">
+        Register
+      </button>
+    </div>
+
+    <!-- Success & Error Alert Messages -->
+    <div *ngIf="errorMessage()" class="alert alert-danger">
+      {{ errorMessage() }}
+    </div>
+    <div *ngIf="successMessage()" class="alert alert-success">
+      {{ successMessage() }}
+    </div>
+
+    <!-- LOGIN FORM -->
+    <form *ngIf="isLoginMode()" [formGroup]="loginForm" (ngSubmit)="onLogin()" class="auth-form">
+      <div class="form-group">
+        <label for="login-email">Email Address</label>
+        <input 
+          id="login-email" 
+          type="email" 
+          formControlName="email" 
+          placeholder="e.g. arjun@example.com" 
+          required>
+        <div *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid" class="validation-err">
+          Please enter a valid email address.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="login-password">Password</label>
+        <input 
+          id="login-password" 
+          type="password" 
+          formControlName="password" 
+          placeholder="••••••••" 
+          required>
+        <div *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid" class="validation-err">
+          Password must be at least 6 characters.
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary" [disabled]="isLoading()">
+        <span *ngIf="!isLoading()">Login Account</span>
+        <span *ngIf="isLoading()">Verifying...</span>
+      </button>
+
+      <p class="toggle-hint">
+        Don't have an account? <span class="switch-link" (click)="toggleMode()">Register here</span>
+      </p>
+    </form>
+
+    <!-- REGISTER FORM -->
+    <form *ngIf="!isLoginMode()" [formGroup]="registerForm" (ngSubmit)="onRegister()" class="auth-form">
+      <div class="form-group">
+        <label for="reg-name">Full Name</label>
+        <input 
+          id="reg-name" 
+          type="text" 
+          formControlName="name" 
+          placeholder="e.g. Arjun Kumar" 
+          required>
+        <div *ngIf="registerForm.get('name')?.touched && registerForm.get('name')?.invalid" class="validation-err">
+          Name is required.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="reg-email">Email Address</label>
+        <input 
+          id="reg-email" 
+          type="email" 
+          formControlName="email" 
+          placeholder="e.g. arjun@example.com" 
+          required>
+        <div *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid" class="validation-err">
+          Valid email is required.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="reg-phone">Phone Number (10 digits)</label>
+        <input 
+          id="reg-phone" 
+          type="tel" 
+          formControlName="phone" 
+          placeholder="e.g. 9876543210" 
+          required>
+        <div *ngIf="registerForm.get('phone')?.touched && registerForm.get('phone')?.invalid" class="validation-err">
+          Enter a valid 10-digit mobile number.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="reg-role">Register As</label>
+        <select id="reg-role" formControlName="role" class="select-input">
+          <option value="customer">Customer</option>
+          <option value="driver">Driver</option>
+          <option value="cab_owner">Cab Owner</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+
+      <!-- Additional Driver details if role is Driver -->
+      <div *ngIf="registerForm.get('role')?.value === 'driver'" class="driver-addons-box">
+        <div class="form-group">
+          <label for="drv-exp">Driving Experience (Years)</label>
+          <input 
+            id="drv-exp" 
+            type="number" 
+            formControlName="experience" 
+            min="0">
+        </div>
+        <div class="form-group">
+          <label for="drv-lang">Spoken Languages (Comma-separated)</label>
+          <input 
+            id="drv-lang" 
+            type="text" 
+            formControlName="languages" 
+            placeholder="e.g. Hindi, English, Marathi">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="reg-password">Password</label>
+        <input 
+          id="reg-password" 
+          type="password" 
+          formControlName="password" 
+          placeholder="••••••••" 
+          required>
+        <div *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid" class="validation-err">
+          Password must be at least 6 characters.
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary" [disabled]="isLoading()">
+        <span *ngIf="!isLoading()">Create Account</span>
+        <span *ngIf="isLoading()">Registering...</span>
+      </button>
+
+      <p class="toggle-hint">
+        Already have an account? <span class="switch-link" (click)="toggleMode()">Login here</span>
+      </p>
+    </form>
+  </div>
+</div>

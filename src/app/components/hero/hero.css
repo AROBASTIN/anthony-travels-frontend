@@ -1,0 +1,126 @@
+.hero-wrap {
+  position: relative;
+  min-height: 85vh;
+  display: flex;
+  align-items: center;
+  /* Premium Dark Blue styling with subtle sunset travel theme overlay */
+  background: linear-gradient(270deg, var(--primary-navy, #0f172a) 0%, #030a14 30%, #560bad 70%, #ff5e62 100%);
+  background-size: 600% 600%;
+  animation: gradientCycle 18s ease infinite;
+  color: #FFFFFF;
+  padding: 100px 0;
+  overflow: hidden;
+}
+
+@keyframes gradientCycle {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at bottom left, rgba(11, 30, 54, 0.8) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-container {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  align-items: center;
+  gap: 60px;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.badge {
+  align-self: flex-start;
+  background-color: rgba(255, 107, 0, 0.15);
+  color: var(--accent-orange);
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255, 107, 0, 0.3);
+  letter-spacing: 1px;
+}
+
+.hero-content h1 {
+  font-size: 52px;
+  line-height: 1.15;
+  color: #FFFFFF;
+}
+
+.subtitle {
+  font-size: 18px;
+  color: #94A3B8;
+  max-width: 540px;
+  line-height: 1.6;
+}
+
+.features-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-top: 12px;
+}
+
+.feat-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #F1F5F9;
+}
+
+.check-icon {
+  color: var(--accent-orange);
+}
+
+.hero-form-wrapper {
+  width: 100%;
+}
+
+@media (max-width: 992px) {
+  .hero-container {
+    grid-template-columns: 1fr;
+    gap: 48px;
+    text-align: center;
+  }
+  .hero-content {
+    align-items: center;
+  }
+  .hero-content h1 {
+    font-size: 38px;
+  }
+  .badge {
+    align-self: center;
+  }
+  .features-list {
+    justify-content: center;
+  }
+  .subtitle {
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-wrap {
+    padding: 60px 0;
+  }
+  .hero-content h1 {
+    font-size: 32px;
+  }
+}

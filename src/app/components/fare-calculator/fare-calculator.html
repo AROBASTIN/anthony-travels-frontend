@@ -1,0 +1,113 @@
+<section class="calculator-wrap" id="calculator">
+  <div class="container">
+    <div class="section-header">
+      <h2>Trip Cost Estimator</h2>
+      <p>Calculate your estimated journey cost in real time. We believe in complete transparency—no hidden fees.</p>
+    </div>
+
+    <!-- Live Fuel Price Strip -->
+    <div class="fuel-price-strip">
+      <div class="fuel-card">
+        <span class="fuel-label">PETROL (LIVE)</span>
+        <span class="fuel-price">₹{{fuelPrices().petrol}}/L</span>
+      </div>
+      <div class="fuel-card">
+        <span class="fuel-label">DIESEL (LIVE)</span>
+        <span class="fuel-price">₹{{fuelPrices().diesel}}/L</span>
+      </div>
+    </div>
+
+    <div class="calculator-grid">
+      <!-- Inputs & Sliders -->
+      <div class="calc-inputs glass-panel">
+        <h3>Customize Your Trip</h3>
+
+        <div class="calc-group">
+          <label for="calc-vehicle">Select Vehicle Type</label>
+          <select id="calc-vehicle" [ngModel]="selectedVehicleType()" (ngModelChange)="selectedVehicleType.set($event)">
+            <option value="hatchback">Hatchback (e.g. WagonR)</option>
+            <option value="sedan">Sedan (e.g. Dzire)</option>
+            <option value="suv">SUV (e.g. Ertiga)</option>
+            <option value="crysta">Innova Crysta (Premium SUV)</option>
+            <option value="traveller">Tempo Traveller (14 Seater)</option>
+          </select>
+        </div>
+
+        <div class="calc-group">
+          <div class="slider-header">
+            <label>Estimated Distance</label>
+            <span class="slider-val">{{distance()}} KM</span>
+          </div>
+          <input type="range" min="10" max="1000" step="10" [ngModel]="distance()" (ngModelChange)="distance.set($event)">
+        </div>
+
+        <div class="calc-group">
+          <div class="slider-header">
+            <label>Trip Duration</label>
+            <span class="slider-val">{{days()}} {{days() === 1 ? 'Day' : 'Days'}}</span>
+          </div>
+          <input type="range" min="1" max="15" step="1" [ngModel]="days()" (ngModelChange)="days.set($event)">
+        </div>
+      </div>
+
+      <!-- Transparent Cost Receipt -->
+      <div class="calc-receipt glass-panel">
+        <h3>Fare Breakdown</h3>
+        
+        <div class="receipt-body">
+          <div class="receipt-row">
+            <span>Vehicle Rent (Base)</span>
+            <span>₹{{vehicleRent()}}</span>
+          </div>
+          <div class="receipt-row">
+            <span>Driver Allowance (Batta)</span>
+            <span>₹{{driverSalary()}}</span>
+          </div>
+          <div class="receipt-row">
+            <span>Estimated Distance</span>
+            <span>{{distance()}} KM</span>
+          </div>
+          <div class="receipt-row">
+            <span>Fuel Required (Est.)</span>
+            <span>{{fuelRequired()}} L</span>
+          </div>
+          <div class="receipt-row">
+            <span>Fuel Charges</span>
+            <span>₹{{fuelCost()}}</span>
+          </div>
+          <div class="receipt-row">
+            <span>Estimated Tolls</span>
+            <span>₹{{tollCharges()}}</span>
+          </div>
+          <div class="receipt-row">
+            <span>Night Charges (Flat)</span>
+            <span>₹{{nightCharges()}}</span>
+          </div>
+          <div class="receipt-row">
+            <span>Festival Charges (Flat)</span>
+            <span>₹{{festivalCharges()}}</span>
+          </div>
+          <div class="receipt-row">
+            <span>Convenience Fee</span>
+            <span>₹{{convenienceFee()}}</span>
+          </div>
+          <div class="receipt-row">
+            <span>Platform Fee</span>
+            <span>₹{{platformFee()}}</span>
+          </div>
+          <div class="receipt-row">
+            <span>GST ({{activeConfig().gst_percent}}%)</span>
+            <span>₹{{gst()}}</span>
+          </div>
+          <hr class="divider">
+          <div class="receipt-row total-row">
+            <span>Estimated Total Fare</span>
+            <span class="total-price">₹{{totalAmount()}}</span>
+          </div>
+        </div>
+
+        <p class="receipt-disclaimer">*Tolls are estimates based on standard routes. Actual toll charges will be based on receipts.</p>
+      </div>
+    </div>
+  </div>
+</section>

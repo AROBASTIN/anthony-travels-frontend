@@ -1,0 +1,67 @@
+<div class="summary-container" *ngIf="booking">
+  <div class="summary-header">
+    <h3>Trip Receipt</h3>
+    <span class="status-badge" [class]="booking.status">{{ booking.status | uppercase }}</span>
+  </div>
+
+  <div class="journey-info">
+    <div class="info-block">
+      <span class="label">Pickup Location</span>
+      <span class="value">{{ booking.pickupLocation }}</span>
+    </div>
+    <div class="info-block" *ngIf="booking.dropLocation">
+      <span class="label">Drop Location</span>
+      <span class="value">{{ booking.dropLocation }}</span>
+    </div>
+    <div class="info-grid">
+      <div class="info-block">
+        <span class="label">Pickup Time</span>
+        <span class="value">{{ booking.pickupDate }} at {{ booking.pickupTime }}</span>
+      </div>
+      <div class="info-block">
+        <span class="label">Drop Time</span>
+        <span class="value">{{ booking.dropDate }} at {{ booking.dropTime }}</span>
+      </div>
+      <div class="info-block">
+        <span class="label">Vehicle / Passengers</span>
+        <span class="value">{{ booking.vehicleType | uppercase }} ({{ booking.passengersCount }} Pax)</span>
+      </div>
+      <div class="info-block">
+        <span class="label">Driver Assigned</span>
+        <span class="value">{{ booking.driver_name || (booking.driverRequired ? 'Assigning...' : 'Self Drive') }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="fare-breakdown" *ngIf="booking.fareDetails">
+    <h4>Fare Details</h4>
+    <div class="receipt-row">
+      <span>Vehicle Rental Allowance</span>
+      <span>₹{{ booking.fareDetails.vehicleRent || booking.fareDetails.rent || 0 }}</span>
+    </div>
+    <div class="receipt-row" *ngIf="booking.driverRequired">
+      <span>Chauffeur Allowance</span>
+      <span>₹{{ booking.fareDetails.driverCost || booking.fareDetails.driverSalary || 0 }}</span>
+    </div>
+    <div class="receipt-row">
+      <span>Estimated Fuel Cost ({{ booking.fareDetails.distance }} KM)</span>
+      <span>₹{{ booking.fareDetails.fuelCost }}</span>
+    </div>
+    <div class="receipt-row">
+      <span>Tolls & Parking Estimates</span>
+      <span>₹{{ booking.fareDetails.tollCharges }}</span>
+    </div>
+    <div class="receipt-row">
+      <span>Convenience Platform Fee</span>
+      <span>₹{{ booking.fareDetails.platformFee || 99 }}</span>
+    </div>
+    <div class="receipt-row">
+      <span>Goods & Services Tax (5% GST)</span>
+      <span>₹{{ booking.fareDetails.gst }}</span>
+    </div>
+    <div class="receipt-total-row">
+      <span>Total Amount</span>
+      <span>₹{{ booking.fareDetails.finalAmount || booking.fareDetails.totalAmount }}</span>
+    </div>
+  </div>
+</div>

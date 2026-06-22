@@ -1,0 +1,249 @@
+<div class="dashboard-container">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="user-profile-summary">
+      <div class="avatar-wrap">
+        <img *ngIf="previews['profile_picture']" [src]="previews['profile_picture']" class="avatar-img" alt="Profile">
+        <div *ngIf="!previews['profile_picture']" class="avatar">{{ auth.currentUser()?.name?.[0] }}</div>
+      </div>
+      <h3>
+        {{ auth.currentUser()?.name }}
+        <span *ngIf="kycStatus() === 'Approved'" class="verified-shield" title="KYC Verified Account">🛡️</span>
+      </h3>
+      <p class="role-badge">Customer</p>
+    </div>
+    
+    <nav class="sidebar-nav">
+      <button [class.active]="activeTab() === 'bookings'" (click)="activeTab.set('bookings')">
+        <span class="icon">🚗</span> My Bookings
+      </button>
+      <button [class.active]="activeTab() === 'history'" (click)="activeTab.set('history')">
+        <span class="icon">🕒</span> Trip History
+      </button>
+      <button [class.active]="activeTab() === 'kyc'" (click)="activeTab.set('kyc')">
+        <span class="icon">🛡️</span> KYC Verification
+      </button>
+      <button [class.active]="activeTab() === 'profile'" (click)="activeTab.set('profile')">
+        <span class="icon">👤</span> Profile Settings
+      </button>
+      <button (click)="logout()" class="logout-btn">
+        <span class="icon">🚪</span> Logout
+      </button>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    
+    <!-- Verification Status Banner -->
+    <div class="verification-banner" [class.verified]="kycStatus() === 'Approved'" [class.pending]="kycStatus() === 'Pending'" [class.rejected]="kycStatus() === 'Rejected'">
+      <div class="banner-text" *ngIf="kycStatus() === 'Approved'">
+        <strong>✓ Verified Customer Account:</strong> Your KYC is approved. You can book rides instantly.
+      </div>
+      <div class="banner-text" *ngIf="kycStatus() === 'Pending'">
+        <strong>⌛ KYC Review Pending:</strong> Your documents are under review. You can book rides once approved.
+      </div>
+      <div class="banner-text" *ngIf="kycStatus() === 'Rejected'">
+        <strong>⚠ Action Required:</strong> Your KYC documents were rejected or need updates. Please review and re-upload.
+      </div>
+      <div class="banner-text" *ngIf="kycStatus() === 'None' || kycStatus() === 'Incomplete'">
+        <strong>⚠ Action Required:</strong> Please complete your document verification under the "KYC Verification" tab to start booking rides.
+      </div>
+    </div>
+
+    <header class="content-header">
+      <h2>Welcome Back, {{ auth.currentUser()?.name }}</h2>
+      <a routerLink="/" class="btn-orange" *ngIf="kycStatus() === 'Approved'">Book New Ride</a>
+      <button class="btn-orange" *ngIf="kycStatus() !== 'Approved'" disabled title="KYC approval required">Book New Ride (KYC Required)</button>
+    </header>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid" *ngIf="stats() && !isLoadingStats()">
+      <div class="stat-card">
+        <span class="stat-num">{{ stats().total_bookings }}</span>
+        <span class="stat-label">Total Rides</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num pending">{{ stats().pending_bookings }}</span>
+        <span class="stat-label">Pending Approval</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num active">{{ stats().active_bookings }}</span>
+        <span class="stat-label">Ongoing / Confirmed</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num success">₹{{ stats().total_spent }}</span>
+        <span class="stat-label">Total Spent</span>
+      </div>
+    </div>
+
+    <!-- Loading Stats Placeholder -->
+    <div class="loading-box" *ngIf="isLoadingStats()">
+      Fetching statistics...
+    </div>
+
+    <!-- Tab Panels -->
+    <section class="tab-panel">
+      
+      <!-- MY BOOKINGS PANEL -->
+      <div *ngIf="activeTab() === 'bookings'">
+        <h3>Active Cabs & Bookings</h3>
+        <div class="loader" *ngIf="isLoadingBookings()">Loading your current bookings...</div>
+        
+        <div class="no-bookings" *ngIf="!isLoadingBookings() && getActiveBookings().length === 0">
+          <p>You have no active or pending bookings. Plan your next trip now!</p>
+          <a routerLink="/" class="btn-orange text-center" *ngIf="kycStatus() === 'Approved'">Book a Ride</a>
+          <button class="btn-orange text-center" *ngIf="kycStatus() !== 'Approved'" disabled>Book a Ride (KYC Required)</button>
+        </div>
+
+        <div class="bookings-grid" *ngIf="!isLoadingBookings() && getActiveBookings().length > 0">
+          <div class="booking-card-wrapper" *ngFor="let b of getActiveBookings()">
+            <app-trip-summary [booking]="b"></app-trip-summary>
+            <div class="action-bar" *ngIf="b.status === 'pending'">
+              <button class="btn-cancel" (click)="cancelBooking(b.id!)">Cancel Ride</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TRIP HISTORY PANEL -->
+      <div *ngIf="activeTab() === 'history'">
+        <h3>Trip History</h3>
+        <div class="loader" *ngIf="isLoadingBookings()">Loading trip history...</div>
+
+        <div class="no-bookings" *ngIf="!isLoadingBookings() && getPastBookings().length === 0">
+          <p>No past trips found.</p>
+        </div>
+
+        <div class="bookings-grid" *ngIf="!isLoadingBookings() && getPastBookings().length > 0">
+          <div class="booking-card-wrapper" *ngFor="let b of getPastBookings()">
+            <app-trip-summary [booking]="b"></app-trip-summary>
+          </div>
+        </div>
+      </div>
+
+      <!-- KYC VERIFICATION PANEL -->
+      <div *ngIf="activeTab() === 'kyc'">
+        <h3>Customer KYC Verification</h3>
+        <p class="section-hint">Upload the mandatory documents below to verify your account and enable booking services.</p>
+
+        <!-- KYC Status Card -->
+        <div class="kyc-status-card" [class]="kycStatus()">
+          <div class="status-header">
+            <h4>Verification Status: <span class="status-text">{{ kycStatus() | uppercase }}</span></h4>
+            <span class="shield-badge-large" *ngIf="kycStatus() === 'Approved'">🛡️ KYC Verified</span>
+          </div>
+          <p *ngIf="kycStatus() === 'Pending'">Your documents have been submitted. Our admin team will review them within 24 hours.</p>
+          <p *ngIf="kycStatus() === 'Approved'">All documents are verified. You are active and ready to book premium rides!</p>
+          <p *ngIf="kycStatus() === 'Rejected'">Some of your documents were rejected. Please replace or re-upload the marked items.</p>
+          <p *ngIf="kycStatus() === 'None' || kycStatus() === 'Incomplete'">Please select and upload all required documents to submit your KYC request.</p>
+        </div>
+
+        <div *ngIf="kycMessage()" class="kyc-progress-container mt-3">
+          <div class="kyc-progress-bar-wrap">
+            <div class="kyc-progress-bar-fill animate-progress"></div>
+          </div>
+          <p class="kyc-progress-text">{{ kycMessage() }}</p>
+        </div>
+        <div *ngIf="kycError()" class="alert alert-danger mt-3">{{ kycError() }}</div>
+        
+        <div class="kyc-sections-grid">
+          <!-- Profile Section -->
+          <div class="kyc-section-box">
+            <h4>1. Profile Photo Section</h4>
+            <div class="doc-upload-item">
+              <label>Profile Picture (Mandatory)</label>
+              <div class="doc-preview-box">
+                <img *ngIf="previews['profile_picture']" [src]="previews['profile_picture']" class="preview-img" alt="Profile Picture">
+                <div *ngIf="!previews['profile_picture']" class="preview-placeholder">No file selected</div>
+              </div>
+              <div class="doc-controls">
+                <input type="file" (change)="onFileSelected($event, 'profile_picture')" id="file-profile" accept="image/*">
+                <label for="file-profile" class="btn-select">Select Profile Image</label>
+                <span class="status-indicator" [class]="getDocStatus('profile_picture')">
+                  {{ getDocStatus('profile_picture') | uppercase }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Identity Section -->
+          <div class="kyc-section-box">
+            <h4>2. Identity Section (Aadhaar Card)</h4>
+            
+            <div class="doc-upload-item">
+              <label>Aadhaar Card Front (Mandatory)</label>
+              <div class="doc-preview-box">
+                <img *ngIf="previews['aadhar_front']" [src]="previews['aadhar_front']" class="preview-img" alt="Aadhaar Front">
+                <div *ngIf="!previews['aadhar_front']" class="preview-placeholder">No file selected</div>
+              </div>
+              <div class="doc-controls">
+                <input type="file" (change)="onFileSelected($event, 'aadhar_front')" id="file-aadhaar-front" accept="image/*,application/pdf">
+                <label for="file-aadhaar-front" class="btn-select">Select Aadhaar Front</label>
+                <span class="status-indicator" [class]="getDocStatus('aadhar_front')">
+                  {{ getDocStatus('aadhar_front') | uppercase }}
+                </span>
+              </div>
+            </div>
+
+            <div class="doc-upload-item mt-4">
+              <label>Aadhaar Card Back (Mandatory)</label>
+              <div class="doc-preview-box">
+                <img *ngIf="previews['aadhar_back']" [src]="previews['aadhar_back']" class="preview-img" alt="Aadhaar Back">
+                <div *ngIf="!previews['aadhar_back']" class="preview-placeholder">No file selected</div>
+              </div>
+              <div class="doc-controls">
+                <input type="file" (change)="onFileSelected($event, 'aadhar_back')" id="file-aadhaar-back" accept="image/*,application/pdf">
+                <label for="file-aadhaar-back" class="btn-select">Select Aadhaar Back</label>
+                <span class="status-indicator" [class]="getDocStatus('aadhar_back')">
+                  {{ getDocStatus('aadhar_back') | uppercase }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="kyc-actions mt-5">
+          <button class="btn-orange" (click)="uploadKyc()" [disabled]="kycStatus() === 'Approved' || isUploading() || getSelectedFilesCount() === 0">
+            Submit KYC Documents
+          </button>
+        </div>
+      </div>
+
+
+      <!-- PROFILE PANEL -->
+      <div *ngIf="activeTab() === 'profile'">
+        <h3>Profile Management</h3>
+        
+        <div *ngIf="profileSuccess()" class="alert alert-success">{{ profileSuccess() }}</div>
+        <div *ngIf="profileError()" class="alert alert-danger">{{ profileError() }}</div>
+
+        <form [formGroup]="profileForm" (ngSubmit)="onUpdateProfile()" class="profile-form">
+          <div class="form-group">
+            <label>Name</label>
+            <input type="text" formControlName="name" placeholder="Full Name">
+            <div *ngIf="profileForm.get('name')?.touched && profileForm.get('name')?.invalid" class="validation-err">
+              Name is required.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Email (Cannot be modified)</label>
+            <input type="email" formControlName="email" readonly>
+          </div>
+
+          <div class="form-group">
+            <label>Phone Number (10 digits)</label>
+            <input type="tel" formControlName="phone" placeholder="Mobile Number">
+            <div *ngIf="profileForm.get('phone')?.touched && profileForm.get('phone')?.invalid" class="validation-err">
+              Enter a valid 10-digit number.
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary">Save Changes</button>
+        </form>
+      </div>
+
+    </section>
+  </main>
+</div>

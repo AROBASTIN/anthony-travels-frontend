@@ -1,0 +1,65 @@
+<section class="packages-wrap" id="packages">
+  <div class="container">
+    <div class="section-header">
+      <span class="badge-accent">Curated Tamil Nadu Tourism</span>
+      <h2>Curated Heritage & Holiday Tour Packages</h2>
+      <p>Seamless outstation cabs and dedicated travel guides for iconic destinations across Tamil Nadu.</p>
+    </div>
+
+    <!-- Filter Buttons -->
+    <div class="filter-wrap">
+      <button [class.active]="activeFilter() === 'all'" (click)="setFilter('all')">All Packages</button>
+      <button [class.active]="activeFilter() === 'pilgrimage'" (click)="setFilter('pilgrimage')">🕌 Pilgrimage</button>
+      <button [class.active]="activeFilter() === 'family'" (click)="setFilter('family')">⛰️ Hill Stations</button>
+      <button [class.active]="activeFilter() === 'honeymoon'" (click)="setFilter('honeymoon')">🌸 Honeymoon</button>
+      <button [class.active]="activeFilter() === 'weekend'" (click)="setFilter('weekend')">🏖️ Weekends</button>
+    </div>
+
+    <!-- Packages Grid -->
+    <div class="packages-grid">
+      <div class="package-card" *ngFor="let pkg of filteredPackages()">
+        <div class="card-image-box" [class]="pkg.imageClass">
+          <!-- Dynamic Visual Indicators based on category -->
+          <div class="tn-graphic-decor">
+            <span *ngIf="pkg.category === 'pilgrimage'" class="decor-icon">🛕</span>
+            <span *ngIf="pkg.category === 'family'" class="decor-icon">🌲</span>
+            <span *ngIf="pkg.category === 'honeymoon'" class="decor-icon">💖</span>
+            <span *ngIf="pkg.category === 'weekend'" class="decor-icon">🌊</span>
+          </div>
+          <span class="duration-badge">{{pkg.duration}}</span>
+        </div>
+
+        <div class="card-details">
+          <div class="card-top">
+            <span class="pkg-category">{{pkg.category | uppercase}}</span>
+            <h3>{{pkg.title}}</h3>
+            <p class="subtitle">{{pkg.subtitle}}</p>
+          </div>
+
+          <div class="pkg-destinations">
+            <strong>Destinations:</strong>
+            <div class="dest-tags">
+              <span class="tag" *ngFor="let dest of pkg.destinations">{{dest}}</span>
+            </div>
+          </div>
+
+          <ul class="pkg-highlights">
+            <li *ngFor="let hl of pkg.highlights">
+              <span class="bullet">✓</span> {{hl}}
+            </li>
+          </ul>
+
+          <p class="itinerary-summary">{{pkg.itinerarySummary}}</p>
+
+          <div class="card-footer">
+            <div class="price-section">
+              <span class="price-label">Price starts at</span>
+              <span class="price-value">₹{{pkg.price}} <span class="all-inclusive">all-incl.</span></span>
+            </div>
+            <button class="btn-primary-sm" (click)="selectPackage(pkg)">Book Package</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

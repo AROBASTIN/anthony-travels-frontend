@@ -1,0 +1,136 @@
+.reviews-wrap {
+  background: radial-gradient(circle at bottom right, rgba(11, 30, 54, 0.05), transparent),
+              #FFFFFF;
+}
+
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 30px;
+}
+
+.review-card {
+  padding: 30px;
+  border-radius: var(--radius-card);
+  transition: var(--transition-smooth);
+}
+
+.review-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(11, 30, 54, 0.08);
+}
+
+.review-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border-light);
+  padding-bottom: 10px;
+}
+
+.google-badge-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.google-text {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.verified-badge {
+  font-size: 11px;
+  color: #10B981;
+  font-weight: 700;
+  background: rgba(16, 185, 129, 0.08);
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+}
+
+.review-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.avatar-placeholder {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-orange) 0%, #ea580c 100%);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  box-shadow: 0 4px 10px rgba(255, 107, 0, 0.15);
+}
+
+.review-meta h3 {
+  font-size: 15px;
+  color: var(--primary-navy);
+  margin: 0;
+  font-weight: 700;
+}
+
+.user-location {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.review-rating-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.stars {
+  color: #FBBF24;
+  font-size: 14px;
+}
+
+.rating-time {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.review-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.trip-badge-new {
+  align-self: flex-start;
+  font-family: 'Outfit', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--primary-navy);
+  background: var(--bg-canvas);
+  border: 1px solid var(--border-light);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+}
+
+.review-text {
+  font-size: 13.5px;
+  color: var(--text-dark);
+  line-height: 1.6;
+  font-style: italic;
+  margin: 0;
+}
+
+@media (max-width: 576px) {
+  .reviews-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

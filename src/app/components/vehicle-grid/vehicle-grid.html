@@ -1,0 +1,87 @@
+<section class="vehicles-wrap" id="vehicles">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-subtitle">Our Fleets</span>
+      <h2>Our Premium Tamil Nadu Travel Fleet</h2>
+      <p>Select from our widely maintained vehicle categories, sanitised and optimized for every single tour.</p>
+    </div>
+
+    <div class="vehicles-grid">
+      <div class="v-card" *ngFor="let car of vehicles">
+        <div class="v-image-box">
+          <div class="v-image-overlay"></div>
+          <!-- Stand-in premium vector SVGs representing each class of vehicle -->
+          <svg *ngIf="car.image === 'hatchback'" viewBox="0 0 100 45" class="car-svg">
+            <path d="M10,35 L90,35 L90,28 L75,20 L40,20 L25,28 L10,28 Z" fill="none" stroke="var(--accent-orange)" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="28" cy="35" r="7" fill="var(--bg-canvas)" stroke="var(--primary-navy)" stroke-width="2.5"/>
+            <circle cx="72" cy="35" r="7" fill="var(--bg-canvas)" stroke="var(--primary-navy)" stroke-width="2.5"/>
+          </svg>
+          <svg *ngIf="car.image === 'sedan'" viewBox="0 0 100 45" class="car-svg">
+            <path d="M5,35 L95,35 L95,25 L75,25 L60,16 L35,16 L20,25 L5,25 Z" fill="none" stroke="var(--accent-orange)" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="22" cy="35" r="7" fill="var(--bg-canvas)" stroke="var(--primary-navy)" stroke-width="2.5"/>
+            <circle cx="78" cy="35" r="7" fill="var(--bg-canvas)" stroke="var(--primary-navy)" stroke-width="2.5"/>
+          </svg>
+          <svg *ngIf="car.image === 'suv' || car.image === 'crysta'" viewBox="0 0 100 45" class="car-svg">
+            <path d="M5,35 L95,35 L95,22 L80,16 L30,16 L20,22 L5,22 Z" fill="none" stroke="var(--accent-orange)" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="22" cy="35" r="7" fill="var(--bg-canvas)" stroke="var(--primary-navy)" stroke-width="2.5"/>
+            <circle cx="78" cy="35" r="7" fill="var(--bg-canvas)" stroke="var(--primary-navy)" stroke-width="2.5"/>
+          </svg>
+          <svg *ngIf="car.image === 'traveller' || car.image === 'minibus'" viewBox="0 0 100 45" class="car-svg">
+            <path d="M5,35 L95,35 L95,14 L15,14 L5,22 Z" fill="none" stroke="var(--accent-orange)" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="25" cy="35" r="7" fill="var(--bg-canvas)" stroke="var(--primary-navy)" stroke-width="2.5"/>
+            <circle cx="75" cy="35" r="7" fill="var(--bg-canvas)" stroke="var(--primary-navy)" stroke-width="2.5"/>
+          </svg>
+          <svg *ngIf="car.image === 'luxury'" viewBox="0 0 100 45" class="car-svg">
+            <path d="M5,32 L95,32 L92,23 L76,21 L55,14 L35,14 L20,21 L5,23 Z" fill="none" stroke="var(--accent-orange)" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="24" cy="32" r="7" fill="var(--bg-canvas)" stroke="var(--primary-navy)" stroke-width="2.5"/>
+            <circle cx="76" cy="32" r="7" fill="var(--bg-canvas)" stroke="var(--primary-navy)" stroke-width="2.5"/>
+          </svg>
+          <span class="v-badge">{{car.category | uppercase}}</span>
+        </div>
+
+        <div class="v-details">
+          <div class="v-header">
+            <h3>{{car.name}}</h3>
+            <div class="v-rating">
+              <span class="rating-star">★</span>
+              <span class="rating-value">{{car.rating}}</span>
+              <span class="rating-count">({{car.reviews}})</span>
+            </div>
+          </div>
+
+          <div class="v-specs-new">
+            <div class="spec-chip">
+              <span class="spec-icon-label">❄️</span>
+              <span class="spec-txt">{{car.ac ? 'Luxury AC' : 'Non-AC'}}</span>
+            </div>
+            <div class="spec-chip">
+              <span class="spec-icon-label">⛽</span>
+              <span class="spec-txt">{{car.fuel}}</span>
+            </div>
+            <div class="spec-chip">
+              <span class="spec-icon-label">👥</span>
+              <span class="spec-txt">{{car.seats}} Seats</span>
+            </div>
+            <div class="spec-chip">
+              <span class="spec-icon-label">💼</span>
+              <span class="spec-txt">Large Luggage</span>
+            </div>
+            <div class="spec-chip full-chip">
+              <span class="spec-icon-label">👮</span>
+              <span class="spec-txt">{{car.driverAvailable ? 'Verified Chauffeur Included' : 'Chauffeur Driven Only'}}</span>
+            </div>
+          </div>
+
+          <div class="v-footer">
+            <div class="price-box">
+              <span class="price-prefix">Rate starting from</span>
+              <span class="price-amount">₹{{car.pricePerKm}}<span class="price-suffix">/KM</span></span>
+            </div>
+            <button class="btn-orange" (click)="selectVehicle(car.name)">Book Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+

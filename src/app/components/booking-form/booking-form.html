@@ -1,0 +1,202 @@
+<div class="glass-form">
+  <div class="form-tabs">
+    <button type="button" [class.active]="activeTab() === 'outstation'" (click)="setTab('outstation')">Outstation</button>
+    <button type="button" [class.active]="activeTab() === 'local'" (click)="setTab('local')">Local Cabs</button>
+    <button type="button" [class.active]="activeTab() === 'airport'" (click)="setTab('airport')">Airport Transfer</button>
+  </div>
+
+  <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()" class="booking-fields">
+    <div class="form-row">
+      <div class="form-group full-width">
+        <label for="pickup">Pickup Location</label>
+        <div class="input-icon-wrapper">
+          <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          <input id="pickup" type="text" formControlName="pickupLocation" placeholder="Enter pickup address, airport or hotel">
+        </div>
+        <div class="error-msg" *ngIf="bookingForm.get('pickupLocation')?.touched && bookingForm.get('pickupLocation')?.invalid">
+          Pickup location is required.
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row" *ngIf="activeTab() !== 'local'">
+      <div class="form-group full-width">
+        <label for="drop">Drop Location</label>
+        <div class="input-icon-wrapper">
+          <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          <input id="drop" type="text" formControlName="dropLocation" placeholder="Enter destination town or landmarks">
+        </div>
+        <div class="error-msg" *ngIf="bookingForm.get('dropLocation')?.touched && bookingForm.get('dropLocation')?.invalid">
+          Drop location is required.
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row grid-2">
+      <div class="form-group">
+        <label for="pdate">Pickup Date</label>
+        <input id="pdate" type="date" formControlName="pickupDate">
+      </div>
+      <div class="form-group">
+        <label for="ptime">Pickup Time</label>
+        <input id="ptime" type="time" formControlName="pickupTime">
+      </div>
+    </div>
+
+    <div class="form-row grid-2">
+      <div class="form-group">
+        <label for="ddate">Drop Date</label>
+        <input id="ddate" type="date" formControlName="dropDate">
+      </div>
+      <div class="form-group">
+        <label for="dtime">Drop Time</label>
+        <input id="dtime" type="time" formControlName="dropTime">
+      </div>
+    </div>
+
+    <div class="form-row grid-2">
+      <div class="form-group">
+        <label for="vtype">Vehicle Category</label>
+        <select id="vtype" formControlName="vehicleType">
+          <option *ngFor="let cat of vehicleCategories" [value]="cat.value">{{cat.label}}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Passenger Count</label>
+        <div class="counter-control">
+          <button type="button" class="counter-btn" (click)="adjustPassengers(-1)">-</button>
+          <span class="counter-value">{{bookingForm.get('passengersCount')?.value}}</span>
+          <button type="button" class="counter-btn" (click)="adjustPassengers(1)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row toggle-row">
+      <div class="toggle-container">
+        <div class="toggle-text">
+          <span class="toggle-title">Driver Required</span>
+          <span class="toggle-subtitle">Chauffeured booking for safe travel</span>
+        </div>
+        <label class="switch">
+          <input type="checkbox" formControlName="driverRequired">
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </div>
+
+    <button type="submit" class="btn-orange-full btn-submit">
+      <span>Search Cabs</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+        <polyline points="12 5 19 12 12 19"></polyline>
+      </svg>
+    </button>
+  </form>
+</div>
+
+<!-- Booking Summary Modal Overlay -->
+<div class="modal-overlay" *ngIf="showSummaryModal()">
+  <div class="modal-container glass-panel">
+    <div class="modal-header">
+      <h3>Booking Summary</h3>
+      <button class="close-btn" (click)="closeModal()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal-content" *ngIf="tripSummary() && driverInfo()">
+      <!-- Trip Summary Receipt Card -->
+      <div class="receipt-card">
+        <h4>Trip Details</h4>
+        <div class="receipt-row">
+          <span>Vehicle Selected</span>
+          <span class="value">{{tripSummary()?.vehicle}}</span>
+        </div>
+        <div class="receipt-row">
+          <span>Estimated Distance</span>
+          <span class="value">{{tripSummary()?.distance}} KM</span>
+        </div>
+        <hr class="receipt-divider">
+        <div class="receipt-row">
+          <span>Vehicle Rent</span>
+          <span class="value">₹{{tripSummary()?.vehicleRent}}</span>
+        </div>
+        <div class="receipt-row">
+          <span>Driver Allowance (Bata)</span>
+          <span class="value">₹{{tripSummary()?.driverCost}}</span>
+        </div>
+        <div class="receipt-row">
+          <span>Estimated Fuel Cost</span>
+          <span class="value">₹{{tripSummary()?.fuelCost}}</span>
+        </div>
+        <div class="receipt-row">
+          <span>Highway Tolls</span>
+          <span class="value">₹{{tripSummary()?.tollCharges}}</span>
+        </div>
+        <div class="receipt-row" *ngIf="tripSummary()?.nightSurcharge">
+          <span>Night Charges</span>
+          <span class="value">₹{{tripSummary()?.nightSurcharge}}</span>
+        </div>
+        <div class="receipt-row" *ngIf="tripSummary()?.festivalSurcharge">
+          <span>Festival Charges</span>
+          <span class="value">₹{{tripSummary()?.festivalSurcharge}}</span>
+        </div>
+        <div class="receipt-row">
+          <span>Convenience Fee</span>
+          <span class="value">₹{{tripSummary()?.convenienceFee}}</span>
+        </div>
+        <div class="receipt-row">
+          <span>Platform Fee</span>
+          <span class="value">₹{{tripSummary()?.platformFee}}</span>
+        </div>
+        <div class="receipt-row">
+          <span>GST</span>
+          <span class="value">₹{{tripSummary()?.gst}}</span>
+        </div>
+        <hr class="receipt-divider">
+        <div class="receipt-row total-row">
+          <span>Total Fare</span>
+          <span class="value total-price">₹{{tripSummary()?.finalAmount}}</span>
+        </div>
+      </div>
+
+      <!-- Driver Card -->
+      <div class="driver-card" *ngIf="bookingForm.get('driverRequired')?.value">
+        <div class="driver-header">
+          <div class="driver-avatar">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
+          <div class="driver-meta">
+            <h5>{{driverInfo()?.name}}</h5>
+            <span class="driver-badge-verified">✓ Verified Driver</span>
+          </div>
+          <div class="driver-rating">
+            <span class="star-rating">{{driverInfo()?.rating}} ★</span>
+          </div>
+        </div>
+        <div class="driver-details">
+          <p><strong>Experience:</strong> {{driverInfo()?.experience}} Years</p>
+          <p><strong>Languages:</strong> {{driverInfo()?.languages?.join(', ')}}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-outline" (click)="closeModal()">Modify Booking</button>
+      <button class="btn-orange" (click)="confirmBooking()">Confirm & Pay</button>
+    </div>
+  </div>
+</div>

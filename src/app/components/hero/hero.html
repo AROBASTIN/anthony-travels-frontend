@@ -1,0 +1,35 @@
+<section class="hero-wrap" id="hero">
+  <div class="hero-overlay"></div>
+  <div class="container hero-container">
+    <div class="hero-content">
+      <span class="badge">PREMIUM OUTSTATION & LOCAL CABS</span>
+      <h1>{{ auth.websiteContent()?.hero_title || 'Your Trusted Premium Journey Across India' }}</h1>
+      <p class="subtitle">{{ auth.websiteContent()?.hero_subtitle || 'Experience transparent pricing, verified professional drivers, and top-tier sanitized vehicles customized for family trips, outstation travel, and airport runs.' }}</p>
+      
+      <div class="features-list">
+        <div class="feat-item">
+          <svg class="check-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span>100% Verified Drivers</span>
+        </div>
+        <div class="feat-item">
+          <svg class="check-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span>No Hidden Charges</span>
+        </div>
+        <div class="feat-item">
+          <svg class="check-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span>GPS Enabled Cabs</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-form-wrapper">
+      <app-booking-form></app-booking-form>
+    </div>
+  </div>
+</section>

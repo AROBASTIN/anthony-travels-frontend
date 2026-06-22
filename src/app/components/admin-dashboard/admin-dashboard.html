@@ -1,0 +1,985 @@
+<div class="dashboard-container">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="user-profile-summary">
+      <div class="avatar">{{ auth.currentUser()?.name?.[0] }}</div>
+      <h3>{{ auth.currentUser()?.name }}</h3>
+      <p class="role-badge">Super Admin</p>
+    </div>
+    
+    <nav class="sidebar-nav">
+      <button [class.active]="activeTab() === 'analytics'" (click)="activeTab.set('analytics')">
+        <span class="icon">📈</span> Analytics & Reports
+      </button>
+      <button [class.active]="activeTab() === 'pricing'" (click)="activeTab.set('pricing')">
+        <span class="icon">💸</span> Pricing Rules
+      </button>
+      <button [class.active]="activeTab() === 'bookings'" (click)="activeTab.set('bookings')">
+        <span class="icon">📅</span> Manage Bookings
+      </button>
+      <button [class.active]="activeTab() === 'drivers'" (click)="activeTab.set('drivers')">
+        <span class="icon">👨‍✈️</span> Manage Drivers
+      </button>
+      <button [class.active]="activeTab() === 'vehicles'" (click)="activeTab.set('vehicles')">
+        <span class="icon">🚘</span> Manage Vehicles
+      </button>
+      <button [class.active]="activeTab() === 'users'" (click)="activeTab.set('users')">
+        <span class="icon">👥</span> Manage Customers
+      </button>
+      <button [class.active]="activeTab() === 'kyc'" (click)="activeTab.set('kyc')">
+        <span class="icon">🛡️</span> KYC Management
+      </button>
+      <button [class.active]="activeTab() === 'enquiries'" (click)="activeTab.set('enquiries'); loadEnquiries()">
+        <span class="icon">💬</span> Enquiries
+        <span class="badge-count" *ngIf="enquiries().length > 0">{{ enquiries().length }}</span>
+      </button>
+      <button [class.active]="activeTab() === 'content'" (click)="activeTab.set('content')">
+        <span class="icon">🌐</span> Website Content
+      </button>
+      <button [class.active]="activeTab() === 'profile'" (click)="activeTab.set('profile')">
+        <span class="icon">👤</span> Admin Profile
+      </button>
+      <button (click)="logout()" class="logout-btn">
+        <span class="icon">🚪</span> Logout
+      </button>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <header class="content-header">
+      <h2>Anthony Travels Control Panel</h2>
+    </header>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid" *ngIf="stats() && !isLoading()">
+      <div class="stat-card">
+        <span class="stat-num">{{ stats().users_count }}</span>
+        <span class="stat-label">Total Users</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">{{ stats().vehicles_count }}</span>
+        <span class="stat-label">Total Vehicles</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num pending">{{ stats().bookings_count }}</span>
+        <span class="stat-label">Total Bookings</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num success">₹{{ stats().total_revenue }}</span>
+        <span class="stat-label">Platform Revenue</span>
+      </div>
+    </div>
+
+    <!-- Tab Panels -->
+    <section class="tab-panel">
+      
+      <!-- ANALYTICS PANEL -->
+      <div *ngIf="activeTab() === 'analytics'">
+        <h3>Global Analytics & Growth</h3>
+        <p class="section-hint font-bold">Comprehensive platform operational indicators and monthly growth reports.</p>
+        
+        <div class="reports-grid">
+          <div class="report-box">
+            <h4>Popular Routes</h4>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Route Route</th>
+                  <th>Frequency</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Pune ⇄ Mumbai</strong></td>
+                  <td>245 Bookings</td>
+                  <td><span class="status-badge verified">HIGH DEMAND</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Mumbai ⇄ Shirdi</strong></td>
+                  <td>185 Bookings</td>
+                  <td><span class="status-badge verified">HIGH DEMAND</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Delhi ⇄ Agra</strong></td>
+                  <td>120 Bookings</td>
+                  <td><span class="status-badge pending">NORMAL</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Mumbai Airport Transfers</strong></td>
+                  <td>310 Bookings</td>
+                  <td><span class="status-badge verified">HIGH DEMAND</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <div class="report-box">
+            <h4>Monthly Growth Logs (2026)</h4>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Month</th>
+                  <th>Revenue Added</th>
+                  <th>Growth Rate</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>June (Current)</td>
+                  <td>₹{{ stats()?.total_revenue }}</td>
+                  <td><strong class="text-green">+15.4%</strong></td>
+                </tr>
+                <tr>
+                  <td>May</td>
+                  <td>₹1,42,800</td>
+                  <td><strong class="text-green">+12.8%</strong></td>
+                </tr>
+                <tr>
+                  <td>April</td>
+                  <td>₹1,26,600</td>
+                  <td><strong class="text-green">+9.5%</strong></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRICING PANEL -->
+      <div *ngIf="activeTab() === 'pricing'">
+        <h3>Global Pricing Configuration</h3>
+        <p class="section-hint">Admins can override base rent rates, per-KM rates, tax percentages, platform fees, and allowances.</p>
+
+        <div *ngIf="pricingSuccess()" class="alert alert-success">{{ pricingSuccess() }}</div>
+        <div *ngIf="pricingError()" class="alert alert-danger">{{ pricingError() }}</div>
+
+        <form [formGroup]="pricingForm" (ngSubmit)="onSavePricing()" class="admin-form">
+          <div class="form-section-title">Base Rent Allowance (Per Day ₹)</div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Hatchback Base Rent</label>
+              <input type="number" formControlName="hatchback_base">
+            </div>
+            <div class="form-group">
+              <label>Sedan Base Rent</label>
+              <input type="number" formControlName="sedan_base">
+            </div>
+            <div class="form-group">
+              <label>SUV Base Rent</label>
+              <input type="number" formControlName="suv_base">
+            </div>
+            <div class="form-group">
+              <label>Innova Crysta Base Rent</label>
+              <input type="number" formControlName="crysta_base">
+            </div>
+            <div class="form-group">
+              <label>Tempo Traveller Base Rent</label>
+              <input type="number" formControlName="traveller_base">
+            </div>
+            <div class="form-group">
+              <label>Mini Bus Base Rent</label>
+              <input type="number" formControlName="minibus_base">
+            </div>
+            <div class="form-group">
+              <label>Luxury Cars Base Rent</label>
+              <input type="number" formControlName="luxury_base">
+            </div>
+          </div>
+
+          <div class="form-section-title mt-4">Per KM Driving Allowance (₹/KM)</div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Hatchback Rate</label>
+              <input type="number" formControlName="hatchback_rate">
+            </div>
+            <div class="form-group">
+              <label>Sedan Rate</label>
+              <input type="number" formControlName="sedan_rate">
+            </div>
+            <div class="form-group">
+              <label>SUV Rate</label>
+              <input type="number" formControlName="suv_rate">
+            </div>
+            <div class="form-group">
+              <label>Innova Crysta Rate</label>
+              <input type="number" formControlName="crysta_rate">
+            </div>
+            <div class="form-group">
+              <label>Tempo Traveller Rate</label>
+              <input type="number" formControlName="traveller_rate">
+            </div>
+            <div class="form-group">
+              <label>Mini Bus Rate</label>
+              <input type="number" formControlName="minibus_rate">
+            </div>
+            <div class="form-group">
+              <label>Luxury Cars Rate</label>
+              <input type="number" formControlName="luxury_rate">
+            </div>
+          </div>
+
+          <div class="form-section-title mt-4">Other Overhead Pricing Constants</div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Driver Allowance (Daily ₹)</label>
+              <input type="number" formControlName="driver_salary">
+            </div>
+            <div class="form-group">
+              <label>Convenience Fee (₹)</label>
+              <input type="number" formControlName="convenience_fee">
+            </div>
+            <div class="form-group">
+              <label>Platform Fee (₹)</label>
+              <input type="number" formControlName="platform_fee">
+            </div>
+            <div class="form-group">
+              <label>Goods & Services Tax (GST %)</label>
+              <input type="number" formControlName="gst_percent">
+            </div>
+            <div class="form-group">
+              <label>Fuel Cost Formula Multiplier</label>
+              <input type="number" step="0.01" formControlName="fuel_cost_formula">
+            </div>
+            <div class="form-group">
+              <label>Toll Multiplier</label>
+              <input type="number" step="0.01" formControlName="toll_multiplier">
+            </div>
+            <div class="form-group">
+              <label>Night Charges (Flat ₹)</label>
+              <input type="number" formControlName="night_charges">
+            </div>
+            <div class="form-group">
+              <label>Festival Charges (Flat ₹)</label>
+              <input type="number" formControlName="festival_charges">
+            </div>
+            <div class="form-group">
+              <label>Seasonal Multiplier</label>
+              <input type="number" step="0.01" formControlName="seasonal_pricing">
+            </div>
+            <div class="form-group">
+              <label>Minimum Booking Amount (₹)</label>
+              <input type="number" formControlName="min_booking_amount">
+            </div>
+            <div class="form-group check-group">
+              <input type="checkbox" id="offers-toggle" formControlName="offers_enabled">
+              <label for="offers-toggle">Enable Promotional Discounts & Offers</label>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary mt-4 max-w-xs">Save Pricing Rules</button>
+        </form>
+      </div>
+
+      <!-- BOOKINGS PANEL -->
+      <div *ngIf="activeTab() === 'bookings'">
+        <h3>Global Booking Audit Logs</h3>
+        <p class="section-hint">Admins can override active bookings, assign drivers, and edit journey amounts.</p>
+
+        <!-- Edit Booking Form Overlay -->
+        <div class="edit-overlay-section" *ngIf="isEditingBooking()">
+          <h4>Edit Trip Reservation</h4>
+          <div *ngIf="bookingSuccess()" class="alert alert-success">{{ bookingSuccess() }}</div>
+          <div *ngIf="bookingError()" class="alert alert-danger">{{ bookingError() }}</div>
+
+          <form [formGroup]="bookingForm" (ngSubmit)="onSaveBooking()" class="admin-form">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Pickup Location</label>
+                <input type="text" formControlName="pickupLocation">
+              </div>
+              <div class="form-group">
+                <label>Drop Location</label>
+                <input type="text" formControlName="dropLocation">
+              </div>
+              <div class="form-group">
+                <label>Pickup Date</label>
+                <input type="date" formControlName="pickupDate">
+              </div>
+              <div class="form-group">
+                <label>Pickup Time</label>
+                <input type="time" formControlName="pickupTime">
+              </div>
+              <div class="form-group">
+                <label>Drop Date</label>
+                <input type="date" formControlName="dropDate">
+              </div>
+              <div class="form-group">
+                <label>Drop Time</label>
+                <input type="time" formControlName="dropTime">
+              </div>
+              <div class="form-group">
+                <label>Vehicle Model Category</label>
+                <input type="text" formControlName="vehicleType">
+              </div>
+              <div class="form-group">
+                <label>Passengers</label>
+                <input type="number" formControlName="passengersCount">
+              </div>
+              <div class="form-group">
+                <label>Trip Status</label>
+                <select formControlName="status">
+                  <option value="pending">Pending Approval</option>
+                  <option value="accepted">Accepted / Ongoing</option>
+                  <option value="completed">Completed</option>
+                  <option value="cancelled">Cancelled</option>
+                  <option value="rejected">Rejected</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Assign Driver</label>
+                <select formControlName="driver_id">
+                  <option value="">No Driver Assigned (Self Drive)</option>
+                  <option *ngFor="let d of drivers()" [value]="d.user_id">{{ d.name }} (Status: {{ d.status }})</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Override Trip Total (₹)</label>
+                <input type="number" formControlName="finalAmount">
+              </div>
+            </div>
+
+            <div class="form-actions mt-3">
+              <button type="button" class="btn-cancel" (click)="closeBookingForm()">Cancel</button>
+              <button type="submit" class="btn-primary">Update Booking</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Bookings List Table -->
+        <div class="table-wrapper" *ngIf="!isEditingBooking() && bookings().length > 0">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Customer</th>
+                <th>Locations</th>
+                <th>Vehicle</th>
+                <th>Timings</th>
+                <th>Driver</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let b of bookings()">
+                <td><strong>{{ b.customer_name }}</strong></td>
+                <td>{{ b.pickupLocation }} ➔ {{ b.dropLocation || 'Local City' }}</td>
+                <td>{{ b.vehicleType }}</td>
+                <td>{{ b.pickupDate }} at {{ b.pickupTime }}</td>
+                <td>{{ b.driver_name || 'Unassigned' }}</td>
+                <td>₹{{ b.fareDetails?.finalAmount || b.fareDetails?.totalAmount || 0 }}</td>
+                <td>
+                  <span class="status-badge" [class]="b.status">{{ b.status | uppercase }}</span>
+                </td>
+                <td>
+                  <div class="table-actions">
+                    <button class="btn-edit-sm" (click)="editBooking(b)">Edit</button>
+                    <button class="btn-delete-sm" (click)="cancelBooking(b.id!)" [disabled]="b.status === 'cancelled'">Cancel</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="no-bookings" *ngIf="!isEditingBooking() && bookings().length === 0">
+          <p>No bookings available in the system.</p>
+        </div>
+      </div>
+
+      <!-- DRIVERS PANEL -->
+      <div *ngIf="activeTab() === 'drivers'">
+        <div class="header-split">
+          <h3>Professional Drivers Management</h3>
+          <button class="btn-orange" *ngIf="!isEditingDriver()" (click)="isEditingDriver.set(true)">Add New Driver</button>
+        </div>
+
+        <!-- Create/Edit Driver Form -->
+        <div class="edit-overlay-section" *ngIf="isEditingDriver()">
+          <h4>{{ editingDriverId() ? 'Modify Driver Record' : 'Register New Professional Driver' }}</h4>
+          <div *ngIf="driverSuccess()" class="alert alert-success">{{ driverSuccess() }}</div>
+          <div *ngIf="driverError()" class="alert alert-danger">{{ driverError() }}</div>
+
+          <form [formGroup]="driverForm" (ngSubmit)="onSaveDriver()" class="admin-form">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" formControlName="name">
+              </div>
+              <div class="form-group" *ngIf="!editingDriverId()">
+                <label>Email Address</label>
+                <input type="email" formControlName="email">
+              </div>
+              <div class="form-group">
+                <label>Phone Number</label>
+                <input type="text" formControlName="phone">
+              </div>
+              <div class="form-group">
+                <label>Experience (Years)</label>
+                <input type="number" formControlName="experience">
+              </div>
+              <div class="form-group">
+                <label>Languages (comma-separated)</label>
+                <input type="text" formControlName="languages">
+              </div>
+              <div class="form-group">
+                <label>Working Status</label>
+                <select formControlName="status">
+                  <option value="available">Available</option>
+                  <option value="busy">Busy / On Trip</option>
+                  <option value="suspended">Suspended / Inactive</option>
+                </select>
+              </div>
+              <div class="form-group check-group">
+                <input type="checkbox" id="drv-ver-toggle" formControlName="verified">
+                <label for="drv-ver-toggle">Approve KYC documents (License & Aadhar)</label>
+              </div>
+            </div>
+
+            <div class="form-actions mt-3">
+              <button type="button" class="btn-cancel" (click)="closeDriverForm()">Cancel</button>
+              <button type="submit" class="btn-primary">Save Driver</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Drivers List -->
+        <div class="table-wrapper" *ngIf="!isEditingDriver() && drivers().length > 0">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Driver Name</th>
+                <th>Experience</th>
+                <th>Languages</th>
+                <th>KYC Documents</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let d of drivers()">
+                <td><strong>{{ d.name }}</strong></td>
+                <td>{{ d.experience }} Years</td>
+                <td>{{ d.languages?.join(', ') }}</td>
+                <td>
+                  <span class="status-badge" [class.verified]="d.verified" [class.pending]="!d.verified">
+                    {{ d.verified ? 'VERIFIED' : 'PENDING' }}
+                  </span>
+                </td>
+                <td>
+                  <span class="status-badge" [class.verified]="d.status === 'available'" [class.pending]="d.status === 'busy' || d.status === 'suspended'">
+                    {{ d.status | uppercase }}
+                  </span>
+                </td>
+                <td>
+                  <div class="table-actions">
+                    <button class="btn-accept-sm" *ngIf="!d.verified" (click)="verifyDriver(d.id || d._id)">Approve KYC</button>
+                    <button class="btn-edit-sm" (click)="editDriver(d)">Edit</button>
+                    <button class="btn-delete-sm" (click)="deleteDriver(d.id || d._id)">Delete</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- VEHICLES PANEL -->
+      <div *ngIf="activeTab() === 'vehicles'">
+        <h3>Fleet Vehicles Management</h3>
+        <p class="section-hint">Approve new vehicle listings posted by fleet owners and adjust pricing models.</p>
+
+        <!-- Edit Vehicle Overlay -->
+        <div class="edit-overlay-section" *ngIf="isEditingVehicle()">
+          <h4>Modify Cab Settings</h4>
+          <div *ngIf="vehicleSuccess()" class="alert alert-success">{{ vehicleSuccess() }}</div>
+          <div *ngIf="vehicleError()" class="alert alert-danger">{{ vehicleError() }}</div>
+
+          <form [formGroup]="vehicleForm" (ngSubmit)="onSaveVehicle()" class="admin-form">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Model Name</label>
+                <input type="text" formControlName="name">
+              </div>
+              <div class="form-group">
+                <label>Plate Number</label>
+                <input type="text" formControlName="plate_number">
+              </div>
+              <div class="form-group">
+                <label>Category</label>
+                <input type="text" formControlName="category">
+              </div>
+              <div class="form-group">
+                <label>Seats Count</label>
+                <input type="number" formControlName="seats">
+              </div>
+              <div class="form-group">
+                <label>Price Per KM (₹)</label>
+                <input type="number" formControlName="price_per_km">
+              </div>
+              <div class="form-group">
+                <label>Cab Status</label>
+                <select formControlName="status">
+                  <option value="available">Available</option>
+                  <option value="maintenance">In Maintenance</option>
+                </select>
+              </div>
+              <div class="form-group check-group">
+                <input type="checkbox" id="veh-app-toggle" formControlName="approved">
+                <label for="veh-app-toggle">Approve Vehicle Listing</label>
+              </div>
+            </div>
+
+            <div class="form-actions mt-3">
+              <button type="button" class="btn-cancel" (click)="closeVehicleForm()">Cancel</button>
+              <button type="submit" class="btn-primary">Save Cab</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Fleet logs -->
+        <div class="table-wrapper" *ngIf="!isEditingVehicle() && vehicles().length > 0">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Cab Model</th>
+                <th>Plate Number</th>
+                <th>Category</th>
+                <th>Rate/KM</th>
+                <th>Approval</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let v of vehicles()">
+                <td><strong>{{ v.name }}</strong></td>
+                <td><code class="plate-code">{{ v.plate_number }}</code></td>
+                <td>{{ v.category | uppercase }}</td>
+                <td>₹{{ v.price_per_km }}/km</td>
+                <td>
+                  <span class="status-badge" [class.verified]="v.approved" [class.pending]="!v.approved">
+                    {{ v.approved ? 'APPROVED' : 'PENDING' }}
+                  </span>
+                </td>
+                <td>
+                  <span class="status-badge" [class.verified]="v.status === 'available'" [class.pending]="v.status !== 'available'">
+                    {{ v.status | uppercase }}
+                  </span>
+                </td>
+                <td>
+                  <div class="table-actions">
+                    <button class="btn-accept-sm" *ngIf="!v.approved" (click)="approveVehicle(v.id)">Approve</button>
+                    <button class="btn-edit-sm" (click)="editVehicle(v)">Edit</button>
+                    <button class="btn-delete-sm" (click)="deleteVehicle(v.id)">Delete</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- USERS PANEL -->
+      <div *ngIf="activeTab() === 'users'">
+        <h3>Customer & Cab Owner Account Records</h3>
+        <p class="section-hint">View all registered customers and fleet owners. Administrators can suspend active access or delete profiles.</p>
+
+        <!-- Edit User Detail overlay -->
+        <div class="edit-overlay-section" *ngIf="isEditingUser()">
+          <h4>Modify User Settings</h4>
+          <div *ngIf="userSuccess()" class="alert alert-success">{{ userSuccess() }}</div>
+          <div *ngIf="userError()" class="alert alert-danger">{{ userError() }}</div>
+
+          <form [formGroup]="userForm" (ngSubmit)="onSaveUser()" class="admin-form">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Name</label>
+                <input type="text" formControlName="name">
+              </div>
+              <div class="form-group">
+                <label>Phone Number</label>
+                <input type="text" formControlName="phone">
+              </div>
+              <div class="form-group">
+                <label>Account Role</label>
+                <select formControlName="role">
+                  <option value="customer">Customer</option>
+                  <option value="cab_owner">Cab Owner</option>
+                  <option value="driver">Driver</option>
+                  <option value="admin">Administrator</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Account Status</label>
+                <select formControlName="status">
+                  <option value="active">Active</option>
+                  <option value="suspended">Suspended / Blocked</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-actions mt-3">
+              <button type="button" class="btn-cancel" (click)="closeUserForm()">Cancel</button>
+              <button type="submit" class="btn-primary">Update Profile</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Users Table -->
+        <div class="table-wrapper" *ngIf="!isEditingUser() && usersList().length > 0">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Full Name</th>
+                <th>Email Address</th>
+                <th>Phone Number</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let u of usersList()">
+                <td><strong>{{ u.name }}</strong></td>
+                <td>{{ u.email }}</td>
+                <td>{{ u.phone }}</td>
+                <td>{{ u.role | uppercase }}</td>
+                <td>
+                  <span class="status-badge" [class.verified]="u.status === 'active' || !u.status" [class.pending]="u.status === 'suspended'">
+                    {{ u.status || 'active' | uppercase }}
+                  </span>
+                </td>
+                <td>
+                  <div class="table-actions">
+                    <button class="btn-edit-sm" (click)="editUser(u)">Edit</button>
+                    <button class="btn-delete-sm" (click)="deleteUser(u.id)">Delete</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- WEBSITE CONTENT PANEL -->
+      <div *ngIf="activeTab() === 'content'">
+        <h3>Homepage Content Blocks</h3>
+        <p class="section-hint">Admins can change banner text, descriptions, and agency contact details.</p>
+
+        <div *ngIf="contentSuccess()" class="alert alert-success">{{ contentSuccess() }}</div>
+        <div *ngIf="contentError()" class="alert alert-danger">{{ contentError() }}</div>
+
+        <form [formGroup]="contentForm" (ngSubmit)="onSaveContent()" class="admin-form">
+          <div class="form-group">
+            <label>Hero Title</label>
+            <input type="text" formControlName="hero_title">
+          </div>
+          <div class="form-group">
+            <label>Hero Subtitle description</label>
+            <textarea formControlName="hero_subtitle" rows="3" class="text-area-input"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Company Info description</label>
+            <textarea formControlName="company_info" rows="3" class="text-area-input"></textarea>
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Contact Phone</label>
+              <input type="text" formControlName="contact_phone">
+            </div>
+            <div class="form-group">
+              <label>Contact Email</label>
+              <input type="email" formControlName="contact_email">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>HQ Address</label>
+            <input type="text" formControlName="contact_address">
+          </div>
+
+          <button type="submit" class="btn-primary mt-4 max-w-xs">Save Website Strings</button>
+        </form>
+      </div>
+
+      <!-- ADMIN PROFILE -->
+      <div *ngIf="activeTab() === 'profile'">
+        <h3>Profile Settings</h3>
+        
+        <div *ngIf="profileSuccess()" class="alert alert-success">{{ profileSuccess() }}</div>
+        <div *ngIf="profileError()" class="alert alert-danger">{{ profileError() }}</div>
+
+        <form [formGroup]="profileForm" (ngSubmit)="onUpdateProfile()" class="profile-form">
+          <div class="form-group">
+            <label>Name</label>
+            <input type="text" formControlName="name" placeholder="Full Name">
+            <div *ngIf="profileForm.get('name')?.touched && profileForm.get('name')?.invalid" class="validation-err">
+              Name is required.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Email (Cannot be modified)</label>
+            <input type="email" formControlName="email" readonly>
+          </div>
+
+          <div class="form-group">
+            <label>Phone Number (10 digits)</label>
+            <input type="tel" formControlName="phone" placeholder="Mobile Number">
+            <div *ngIf="profileForm.get('phone')?.touched && profileForm.get('phone')?.invalid" class="validation-err">
+              Enter a valid 10-digit number.
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary">Save Changes</button>
+        </form>
+      </div>
+
+      <!-- KYC MANAGEMENT PANEL -->
+      <div *ngIf="activeTab() === 'kyc'">
+        <h3>KYC Verification Requests</h3>
+        <p class="section-hint">Review driver, customer, and cab owner identity documents. Verify profiles to allow system bookings and actions.</p>
+
+        <div *ngIf="kycSuccess()" class="alert alert-success">{{ kycSuccess() }}</div>
+        <div *ngIf="kycError()" class="alert alert-danger">{{ kycError() }}</div>
+
+        <div class="no-bookings" *ngIf="kycRequests().length === 0">
+          <p>No KYC verification requests found in the database.</p>
+        </div>
+
+        <div class="kyc-requests-grid" *ngIf="kycRequests().length > 0">
+          <div class="kyc-request-card" *ngFor="let req of kycRequests()">
+            <div class="request-header">
+              <div>
+                <h4>{{ req.name }}</h4>
+                <p class="user-meta">Email: {{ req.email }} | Role: <span class="role-badge">{{ req.role | uppercase }}</span></p>
+              </div>
+              <span class="status-badge" [class.verified]="req.status === 'Approved'" [class.pending]="req.status === 'Pending'" [class.rejected]="req.status === 'Rejected'">
+                {{ req.status | uppercase }}
+              </span>
+            </div>
+
+            <div class="request-documents">
+              <h5>Submitted Documents</h5>
+              <div class="admin-docs-grid">
+                <div class="admin-doc-item" *ngFor="let doc of req.documents">
+                  <span class="doc-label">{{ doc.doc_type | uppercase }}</span>
+                  <div class="admin-doc-preview">
+                    <img *ngIf="doc.file_url && !doc.file_url.endsWith('.pdf')" [src]="doc.file_url" class="admin-thumb" alt="{{ doc.doc_type }}">
+                    <div *ngIf="doc.file_url && doc.file_url.endsWith('.pdf')" class="admin-pdf-placeholder">📄 PDF Document</div>
+                    <div *ngIf="!doc.file_url" class="admin-no-file">No file url</div>
+                  </div>
+                  <div class="admin-doc-meta">
+                    <span class="status-indicator" [class]="doc.status">{{ doc.status | uppercase }}</span>
+                    <a *ngIf="doc.file_url" [href]="doc.file_url" target="_blank" class="btn-view-link">Open File ↗</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="request-actions mt-3" *ngIf="req.status === 'Pending' || req.status === 'Rejected' || req.status === 'Incomplete'">
+              <button class="btn-accept" (click)="approveKyc(req.id)">Approve KYC</button>
+              <button class="btn-orange" (click)="openKycActionModal(req, 'reupload')">Request Re-upload</button>
+              <button class="btn-cancel" (click)="openKycActionModal(req, 'reject')">Reject KYC</button>
+            </div>
+            <div class="request-notes mt-2" *ngIf="req.notes">
+              <strong>Compliance Notes:</strong>
+              <p class="notes-text">{{ req.notes }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- KYC REJECTION/REUPLOAD ACTION MODAL -->
+        <div class="modal-backdrop" *ngIf="showKycModal()">
+          <div class="modal-content-wrapper">
+            <header class="modal-header">
+              <h4>{{ kycActionType() === 'reject' ? 'Reject KYC Verification' : 'Request Document Re-upload' }}</h4>
+              <button class="btn-close-modal" (click)="closeKycModal()">×</button>
+            </header>
+            
+            <div class="modal-body">
+              <p *ngIf="kycActionType() === 'reupload'" class="section-hint">Select the specific document(s) you wish to mark for replacement:</p>
+              
+              <!-- Checkboxes for document reupload selection -->
+              <div class="reupload-docs-list" *ngIf="kycActionType() === 'reupload' && selectedRequestForAction()">
+                <div class="reupload-checkbox-item" *ngFor="let doc of selectedRequestForAction().documents">
+                  <input type="checkbox" [id]="'reupload-' + doc.doc_type" [(ngModel)]="reuploadDocTypes[doc.doc_type]">
+                  <label [for]="'reupload-' + doc.doc_type">{{ doc.doc_type | uppercase }}</label>
+                </div>
+              </div>
+
+              <div class="form-group mt-3">
+                <label>Reason / Notes for User</label>
+                <textarea [(ngModel)]="kycActionNotes" placeholder="Explain what is wrong or why document is rejected..." rows="4" class="text-area-input"></textarea>
+              </div>
+            </div>
+
+            <footer class="modal-footer">
+              <button class="btn-cancel" (click)="closeKycModal()">Cancel</button>
+              <button class="btn-primary" (click)="submitKycAction()">Submit Action</button>
+            </footer>
+          </div>
+        </div>
+      </div>
+
+      <!-- ENQUIRY MANAGEMENT PANEL -->
+      <div *ngIf="activeTab() === 'enquiries'">
+        <h3>Enquiry Management</h3>
+        <p class="section-hint">All WhatsApp booking enquiries submitted by customers are tracked here. Update status, add notes, and export records.</p>
+
+        <div *ngIf="enquirySuccess()" class="alert alert-success">{{ enquirySuccess() }}</div>
+        <div *ngIf="enquiryError()" class="alert alert-danger">{{ enquiryError() }}</div>
+
+        <!-- Toolbar -->
+        <div class="enq-toolbar">
+          <div class="enq-search-wrap">
+            <input type="text" class="enq-search-input" placeholder="🔍 Search by name, phone, email, location..."
+              [value]="enquirySearch()"
+              (input)="onEnquirySearch($any($event.target).value)"
+              id="enq-search">
+          </div>
+          <button class="btn-export" (click)="exportEnquiriesCSV()" title="Export to CSV" id="enq-export-btn">
+            ⬇ Export CSV
+          </button>
+          <button class="btn-refresh" (click)="loadEnquiries()" title="Refresh" id="enq-refresh-btn">
+            🔄 Refresh
+          </button>
+        </div>
+
+        <!-- Status Filter Tabs -->
+        <div class="enq-filter-tabs">
+          <button class="enq-tab" [class.active]="enquiryStatusFilter() === ''" (click)="onEnquiryFilterChange('')">
+            All <span class="tab-count">{{ enquiries().length }}</span>
+          </button>
+          <button class="enq-tab new-tab" [class.active]="enquiryStatusFilter() === 'new'" (click)="onEnquiryFilterChange('new')">
+            🆕 New
+          </button>
+          <button class="enq-tab contacted-tab" [class.active]="enquiryStatusFilter() === 'contacted'" (click)="onEnquiryFilterChange('contacted')">
+            📞 Contacted
+          </button>
+          <button class="enq-tab converted-tab" [class.active]="enquiryStatusFilter() === 'converted'" (click)="onEnquiryFilterChange('converted')">
+            ✅ Converted
+          </button>
+          <button class="enq-tab closed-tab" [class.active]="enquiryStatusFilter() === 'closed'" (click)="onEnquiryFilterChange('closed')">
+            🔒 Closed
+          </button>
+        </div>
+
+        <!-- Empty State -->
+        <div class="no-bookings" *ngIf="enquiries().length === 0">
+          <p>No enquiries found. Customers will appear here after submitting the WhatsApp booking form.</p>
+        </div>
+
+        <!-- Enquiry Table -->
+        <div class="table-wrapper" *ngIf="enquiries().length > 0">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Customer</th>
+                <th>Trip Details</th>
+                <th>Vehicle</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let enq of enquiries(); let i = index">
+                <td class="enq-idx">{{ i + 1 }}</td>
+                <td>
+                  <strong>{{ enq.full_name }}</strong><br>
+                  <span class="text-muted">📱 {{ enq.mobile_number }}</span><br>
+                  <span class="text-muted" *ngIf="enq.email">📧 {{ enq.email }}</span>
+                </td>
+                <td>
+                  <strong>{{ enq.pickup_location }}</strong>
+                  <span *ngIf="enq.drop_location"> → {{ enq.drop_location }}</span><br>
+                  <span class="text-muted">{{ enq.journey_date }} {{ enq.journey_time }}</span><br>
+                  <span class="text-muted">{{ enq.trip_type === 'round_trip' ? '🔄 Round Trip' : '➡️ One Way' }}</span><br>
+                  <span class="text-muted">👥 {{ enq.passengers }}P / 🧳 {{ enq.bags }}B</span>
+                </td>
+                <td>
+                  <span class="vehicle-tag">{{ enq.vehicle_type | uppercase }}</span><br>
+                  <span class="text-muted" *ngIf="enq.ac_required">❄️ AC</span>
+                  <span class="text-muted" *ngIf="enq.driver_required"> 🧑‍✈️ Driver</span>
+                </td>
+                <td>
+                  <span class="text-muted">{{ enq.created_at | date:'dd MMM yy' }}</span>
+                </td>
+                <td>
+                  <span class="status-badge" [class]="getEnquiryStatusClass(enq.status)">
+                    {{ enq.status | uppercase }}
+                  </span>
+                </td>
+                <td>
+                  <div class="table-actions">
+                    <button class="btn-edit-sm" (click)="viewEnquiry(enq)" [id]="'enq-view-' + enq.id">View</button>
+                    <a [href]="'https://wa.me/' + enq.mobile_number.replace(/[^\\d+]/g, '')" target="_blank" class="btn-edit-sm wa-link">WhatsApp</a>
+                    <a [href]="'tel:' + enq.mobile_number" class="btn-edit-sm">Call</a>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Enquiry Detail Modal -->
+        <div class="modal-backdrop" *ngIf="showEnquiryDetail() && selectedEnquiry()">
+          <div class="modal-content-wrapper enq-detail-modal">
+            <header class="modal-header">
+              <h4>Enquiry Details — {{ selectedEnquiry().full_name }}</h4>
+              <button class="btn-close-modal" (click)="closeEnquiryDetail()">×</button>
+            </header>
+            <div class="modal-body">
+              <div class="enq-detail-grid">
+                <div class="enq-detail-row"><span>👤 Name</span><strong>{{ selectedEnquiry().full_name }}</strong></div>
+                <div class="enq-detail-row"><span>📱 Mobile</span><strong>{{ selectedEnquiry().mobile_number }}</strong></div>
+                <div class="enq-detail-row" *ngIf="selectedEnquiry().email"><span>📧 Email</span><strong>{{ selectedEnquiry().email }}</strong></div>
+                <div class="enq-detail-row"><span>🟢 Pickup</span><strong>{{ selectedEnquiry().pickup_location }}</strong></div>
+                <div class="enq-detail-row" *ngIf="selectedEnquiry().drop_location"><span>🔴 Drop</span><strong>{{ selectedEnquiry().drop_location }}</strong></div>
+                <div class="enq-detail-row"><span>📅 Journey Date</span><strong>{{ selectedEnquiry().journey_date }} {{ selectedEnquiry().journey_time }}</strong></div>
+                <div class="enq-detail-row" *ngIf="selectedEnquiry().return_date"><span>🔙 Return Date</span><strong>{{ selectedEnquiry().return_date }}</strong></div>
+                <div class="enq-detail-row"><span>🔀 Trip Type</span><strong>{{ selectedEnquiry().trip_type === 'round_trip' ? 'Round Trip' : 'One Way' }}</strong></div>
+                <div class="enq-detail-row"><span>👥 Passengers</span><strong>{{ selectedEnquiry().passengers }}</strong></div>
+                <div class="enq-detail-row"><span>🧳 Bags</span><strong>{{ selectedEnquiry().bags }}</strong></div>
+                <div class="enq-detail-row"><span>🚙 Vehicle</span><strong>{{ selectedEnquiry().vehicle_type | uppercase }}</strong></div>
+                <div class="enq-detail-row"><span>❄️ AC</span><strong>{{ selectedEnquiry().ac_required ? 'Yes' : 'No' }}</strong></div>
+                <div class="enq-detail-row"><span>🧑‍✈️ Driver</span><strong>{{ selectedEnquiry().driver_required ? 'Yes' : 'No' }}</strong></div>
+                <div class="enq-detail-row" *ngIf="selectedEnquiry().special_requests"><span>💬 Special Notes</span><strong>{{ selectedEnquiry().special_requests }}</strong></div>
+              </div>
+
+              <div class="form-group mt-3">
+                <label>Assign To (Staff Name)</label>
+                <input type="text" [value]="enquiryAssignTo()" (input)="enquiryAssignTo.set($any($event.target).value)" placeholder="Staff member name..." id="enq-assign">
+              </div>
+              <div class="form-group mt-2">
+                <label>Internal Notes</label>
+                <textarea [value]="enquiryNotes()" (input)="enquiryNotes.set($any($event.target).value)" rows="3" class="text-area-input" placeholder="Add internal notes about this enquiry..." id="enq-notes-field"></textarea>
+              </div>
+
+              <div class="enq-status-actions mt-3">
+                <p class="section-hint">Update Status:</p>
+                <div class="enq-status-btn-row">
+                  <button class="enq-status-btn new" (click)="updateEnquiryStatus('new')" id="enq-status-new">🆕 New</button>
+                  <button class="enq-status-btn contacted" (click)="updateEnquiryStatus('contacted')" id="enq-status-contacted">📞 Contacted</button>
+                  <button class="enq-status-btn converted" (click)="updateEnquiryStatus('converted')" id="enq-status-converted">✅ Converted</button>
+                  <button class="enq-status-btn closed" (click)="updateEnquiryStatus('closed')" id="enq-status-closed">🔒 Closed</button>
+                </div>
+              </div>
+            </div>
+            <footer class="modal-footer">
+              <div class="enq-quick-actions">
+                <a [href]="'https://wa.me/' + selectedEnquiry().mobile_number.replace(/[^\\d+]/g, '')" target="_blank" class="btn-primary">💬 WhatsApp Customer</a>
+                <a [href]="'tel:' + selectedEnquiry().mobile_number" class="btn-outline-sm">📞 Call Now</a>
+              </div>
+              <button class="btn-cancel" (click)="closeEnquiryDetail()">Close</button>
+            </footer>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+</div>

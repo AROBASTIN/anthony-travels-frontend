@@ -1,0 +1,132 @@
+.driver-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+  padding: 1.2rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.driver-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.driver-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-bottom: 1px solid #edf2f7;
+  padding-bottom: 0.8rem;
+  margin-bottom: 0.8rem;
+}
+
+.driver-avatar {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #0b1b3d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-letter {
+  color: #fff;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.status-indicator {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+
+.status-indicator.available {
+  background-color: #48bb78;
+}
+
+.status-indicator.busy {
+  background-color: #ecc94b;
+}
+
+.driver-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.name-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.name-badge h4 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #1a202c;
+  font-weight: 700;
+}
+
+.verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background-color: #e6fffa;
+  color: #319795;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid #b2f5ea;
+}
+
+.badge-icon {
+  fill: currentColor;
+}
+
+.experience-text {
+  margin: 0.2rem 0 0 0;
+  font-size: 0.85rem;
+  color: #718096;
+  font-weight: 500;
+}
+
+.driver-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+}
+
+.detail-row .label {
+  color: #718096;
+  font-weight: 600;
+}
+
+.detail-row .value {
+  color: #2d3748;
+  font-weight: 500;
+}
+
+.detail-row .rating-value {
+  color: #2d3748;
+  font-weight: 700;
+}
+
+.detail-row .star {
+  color: #ecc94b;
+  font-size: 1rem;
+}

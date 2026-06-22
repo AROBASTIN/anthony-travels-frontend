@@ -1,0 +1,46 @@
+<header class="header">
+  <div class="header-container">
+    <div class="logo-wrapper" (click)="scrollToSection('hero')">
+      <span class="logo-text">Anthony <span class="accent">Travels</span></span>
+    </div>
+
+    <!-- Desktop Navigation -->
+    <nav class="desktop-nav">
+      <a (click)="scrollToSection('vehicles')">Vehicles</a>
+      <a (click)="scrollToSection('calculator')">Estimator</a>
+      <a (click)="scrollToSection('why-choose-us')">Why Us</a>
+      <a (click)="scrollToSection('reviews')">Reviews</a>
+      <a (click)="scrollToSection('faq')">FAQ</a>
+      <a *ngIf="auth.isLoggedIn()" (click)="navigateToDashboard()">Dashboard</a>
+      <a *ngIf="!auth.isLoggedIn()" routerLink="/login" class="btn-orange">Login / Register</a>
+      <a *ngIf="auth.isLoggedIn()" (click)="auth.logout()" class="btn-orange">Logout</a>
+    </nav>
+
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-toggle" (click)="toggleMobileMenu()" aria-label="Toggle Navigation">
+      <svg *ngIf="!isMobileMenuOpen()" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="4" y1="12" x2="20" y2="12"></line>
+        <line x1="4" y1="6" x2="20" y2="6"></line>
+        <line x1="4" y1="18" x2="20" y2="18"></line>
+      </svg>
+      <svg *ngIf="isMobileMenuOpen()" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile Dropdown Navigation -->
+  <div class="mobile-menu" [class.open]="isMobileMenuOpen()">
+    <nav class="mobile-nav">
+      <a (click)="scrollToSection('vehicles')">Vehicles</a>
+      <a (click)="scrollToSection('calculator')">Estimator</a>
+      <a (click)="scrollToSection('why-choose-us')">Why Us</a>
+      <a (click)="scrollToSection('reviews')">Reviews</a>
+      <a (click)="scrollToSection('faq')">FAQ</a>
+      <a *ngIf="auth.isLoggedIn()" (click)="navigateToDashboard()">Dashboard</a>
+      <a *ngIf="!auth.isLoggedIn()" routerLink="/login" class="btn-orange mobile-cta">Login</a>
+      <a *ngIf="auth.isLoggedIn()" (click)="auth.logout()" class="btn-orange mobile-cta">Logout</a>
+    </nav>
+  </div>
+</header>

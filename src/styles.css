@@ -1,1 +1,185 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global Styles & Variables for Anthony Travels */
+
+:root {
+  /* Colors */
+  --primary-navy: #0B1E36;
+  --primary-navy-light: #1A304D;
+  --accent-orange: #FF6B00;
+  --accent-orange-hover: #E05E00;
+  --bg-canvas: #F8F9FA;
+  --bg-card: #FFFFFF;
+  --text-dark: #1E293B;
+  --text-light: #F8F9FA;
+  --text-muted: #64748B;
+  --border-light: #E2E8F0;
+
+  /* Glassmorphism Presets */
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-bg-dark: rgba(11, 30, 54, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-shadow: 0 8px 32px 0 rgba(11, 30, 54, 0.12);
+
+  /* Borders & Spacing */
+  --radius-card: 16px;
+  --radius-pill: 9999px;
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Base Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-canvas);
+  color: var(--text-dark);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Outfit', sans-serif;
+  color: var(--primary-navy);
+  font-weight: 700;
+}
+
+/* Common Layout Components */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Premium Buttons */
+button, .btn {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-smooth);
+}
+
+.btn-orange {
+  background-color: var(--accent-orange);
+  color: #FFFFFF;
+  padding: 12px 28px;
+  border-radius: var(--radius-pill);
+  font-size: 15px;
+}
+
+.btn-orange:hover {
+  background-color: var(--accent-orange-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 107, 0, 0.2);
+}
+
+.btn-orange-full {
+  width: 100%;
+  background-color: var(--accent-orange);
+  color: #FFFFFF;
+  padding: 16px;
+  border-radius: var(--radius-pill);
+  font-size: 16px;
+}
+
+.btn-orange-full:hover {
+  background-color: var(--accent-orange-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 2px solid var(--primary-navy);
+  color: var(--primary-navy);
+  padding: 10px 24px;
+  border-radius: var(--radius-pill);
+  font-size: 15px;
+}
+
+.btn-outline:hover {
+  background-color: var(--primary-navy);
+  color: #FFFFFF;
+  transform: translateY(-2px);
+}
+
+/* Section Containers */
+section {
+  padding: 80px 0;
+  position: relative;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.section-header h2 {
+  font-size: 36px;
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.section-header h2::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 4px;
+  background-color: var(--accent-orange);
+  margin: 12px auto 0;
+  border-radius: var(--radius-pill);
+}
+
+.section-header p {
+  color: var(--text-muted);
+  font-size: 18px;
+}
+
+/* Glassmorphism Styles */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: var(--radius-card);
+}
+
+/* Responsive Grid/Flex Utilities */
+.grid {
+  display: grid;
+  gap: 30px;
+}
+
+/* Scroll Snap/Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-canvas);
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+/* Mobile responsive resets */
+@media (max-width: 768px) {
+  section {
+    padding: 48px 0;
+  }
+  .section-header h2 {
+    font-size: 28px;
+  }
+}

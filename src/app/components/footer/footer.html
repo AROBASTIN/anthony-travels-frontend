@@ -1,0 +1,63 @@
+<footer class="footer-wrap">
+  <div class="container footer-container">
+    <div class="footer-col brand-col">
+      <h3 class="logo-text">Anthony <span class="accent">Travels</span></h3>
+      <p>{{ auth.websiteContent()?.company_info || 'Premium, safe, and transparent travel solutions across India. Sanitized cabs, certified professional drivers, and zero hidden costs.' }}</p>
+      
+      <div class="social-links">
+        <a href="https://facebook.com/anthonytravels" target="_blank" aria-label="Facebook">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+          </svg>
+        </a>
+        <a href="https://instagram.com/anthonytravels" target="_blank" aria-label="Instagram">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h4>Our Services</h4>
+      <ul>
+        <li><a href="#vehicles">Outstation Rides</a></li>
+        <li><a href="#vehicles">Local Hourly Cabs</a></li>
+        <li><a href="#vehicles">Airport Pickup/Drop</a></li>
+        <li><a href="#vehicles">Luxury Vehicle Hires</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#why-choose-us">Why Choose Us</a></li>
+        <li><a href="#reviews">Testimonials</a></li>
+        <li><a href="#" (click)="$event.preventDefault(); alert('Privacy Policy details linked.')">Privacy Policy</a></li>
+        <li><a href="#" (click)="$event.preventDefault(); alert('Terms & Conditions linked.')">Terms & Conditions</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col contact-col">
+      <h4>Contact Info</h4>
+      <p><strong>Address:</strong> {{ auth.websiteContent()?.contact_address || '12/4, Residency Road, Bangalore, KA - 560025' }}</p>
+      <p><strong>Phone:</strong> <a [href]="'tel:' + (auth.websiteContent()?.contact_phone || '+919876543210')">{{ auth.websiteContent()?.contact_phone || '+91 98765 43210' }}</a></p>
+      <p><strong>WhatsApp:</strong> <a [href]="'https://wa.me/' + getWhatsAppPhone()" target="_blank">{{ auth.websiteContent()?.contact_phone || '+91 98765 43210' }}</a></p>
+      <p><strong>Email:</strong> <a [href]="'mailto:' + (auth.websiteContent()?.contact_email || 'support@anthonytravels.com')">{{ auth.websiteContent()?.contact_email || 'support@anthonytravels.com' }}</a></p>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="container footer-bottom-container">
+      <p>&copy; {{currentYear}} Anthony Travels. All Rights Reserved.</p>
+      <button class="back-to-top" (click)="scrollToTop()">
+        <span>Back to top</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+      </button>
+    </div>
+  </div>
+</footer>

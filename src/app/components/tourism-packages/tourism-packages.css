@@ -1,0 +1,268 @@
+.packages-wrap {
+  padding: 5rem 0;
+  background-color: var(--bg-canvas, #fafafa);
+  border-top: 1px solid var(--border-color, #eef0f2);
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 3.5rem;
+}
+
+.badge-accent {
+  background-color: rgba(255, 126, 41, 0.1);
+  color: var(--accent-orange, #ff7e29);
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: inline-block;
+  margin-bottom: 0.75rem;
+}
+
+.section-header h2 {
+  font-size: 2.25rem;
+  color: var(--primary-navy, #1e293b);
+  margin-bottom: 0.75rem;
+}
+
+.section-header p {
+  color: var(--text-muted, #64748b);
+  max-width: 600px;
+  margin: 0 auto;
+  font-size: 1.05rem;
+}
+
+.filter-wrap {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+
+.filter-wrap button {
+  background: white;
+  border: 1px solid var(--border-color, #eef0f2);
+  padding: 0.6rem 1.25rem;
+  border-radius: 50px;
+  font-weight: 600;
+  color: var(--text-dark, #334155);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.filter-wrap button:hover,
+.filter-wrap button.active {
+  background-color: var(--accent-orange, #ff7e29);
+  color: white;
+  border-color: var(--accent-orange, #ff7e29);
+  box-shadow: 0 4px 10px rgba(255, 126, 41, 0.25);
+  transform: translateY(-2px);
+}
+
+.packages-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 0 1.5rem;
+}
+
+.package-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.package-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.card-image-box {
+  height: 180px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Beautiful Tamil Nadu Themed Gradients */
+.madurai {
+  background: linear-gradient(135deg, #ff9900, #ff5e62);
+}
+
+.ooty {
+  background: linear-gradient(135deg, #11998e, #38ef7d);
+}
+
+.kodaikanal {
+  background: linear-gradient(135deg, #4ea8de, #560bad);
+}
+
+.weekend {
+  background: linear-gradient(135deg, #f12711, #f5af19);
+}
+
+.tn-graphic-decor {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.15;
+}
+
+.decor-icon {
+  font-size: 6rem;
+}
+
+.duration-badge {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.card-details {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.card-top {
+  margin-bottom: 1.25rem;
+}
+
+.pkg-category {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent-orange, #ff7e29);
+  letter-spacing: 1px;
+}
+
+.card-top h3 {
+  font-size: 1.25rem;
+  color: var(--primary-navy, #1e293b);
+  margin: 0.4rem 0;
+}
+
+.card-top .subtitle {
+  font-size: 0.9rem;
+  color: var(--text-muted, #64748b);
+  line-height: 1.4;
+}
+
+.pkg-destinations {
+  font-size: 0.85rem;
+  margin-bottom: 1.25rem;
+}
+
+.pkg-destinations strong {
+  display: block;
+  margin-bottom: 0.4rem;
+  color: var(--primary-navy, #1e293b);
+}
+
+.dest-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.tag {
+  background: #f1f5f9;
+  color: var(--text-dark, #334155);
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.pkg-highlights {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.25rem 0;
+  font-size: 0.85rem;
+  color: var(--text-dark, #334155);
+}
+
+.pkg-highlights li {
+  margin-bottom: 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pkg-highlights .bullet {
+  color: #10b981;
+  font-weight: bold;
+}
+
+.itinerary-summary {
+  font-size: 0.8rem;
+  color: var(--text-muted, #64748b);
+  font-style: italic;
+  margin-bottom: 1.5rem;
+  border-top: 1px dashed var(--border-color, #eef0f2);
+  padding-top: 0.75rem;
+}
+
+.card-footer {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--border-color, #eef0f2);
+  padding-top: 1.25rem;
+}
+
+.price-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.price-label {
+  font-size: 0.75rem;
+  color: var(--text-muted, #64748b);
+}
+
+.price-value {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--primary-navy, #1e293b);
+}
+
+.all-inclusive {
+  font-size: 0.7rem;
+  color: #10b981;
+  font-weight: 600;
+}
+
+.btn-primary-sm {
+  background: var(--accent-orange, #ff7e29);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-primary-sm:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(255, 126, 41, 0.2);
+}
