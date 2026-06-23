@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface EnquiryPayload {
   full_name: string;
@@ -23,7 +24,7 @@ export interface EnquiryPayload {
 @Injectable({ providedIn: 'root' })
 export class EnquiryService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:8000/api';
+  private readonly apiUrl = environment.apiUrl;
 
   /** Submit a new enquiry (no auth required) */
   submitEnquiry(payload: EnquiryPayload): Observable<any> {

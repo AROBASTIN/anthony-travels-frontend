@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -9,7 +10,7 @@ import { AuthService } from './auth.service';
 export class VehicleService {
   private readonly http = inject(HttpClient);
   private readonly auth = inject(AuthService);
-  private readonly apiUrl = 'http://localhost:8000/api';
+  private readonly apiUrl = environment.apiUrl;
 
   getVehicles(category?: string): Observable<any[]> {
     const url = category ? `${this.apiUrl}/vehicles?category=${category}` : `${this.apiUrl}/vehicles`;

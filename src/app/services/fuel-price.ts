@@ -1,5 +1,6 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 export interface FuelPrices {
   petrol: number;
@@ -11,7 +12,7 @@ export interface FuelPrices {
 })
 export class FuelPriceService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:8000/api/fuel-prices';
+  private readonly apiUrl = `${environment.apiUrl}/fuel-prices`;
 
   private readonly _prices = signal<FuelPrices>({
     petrol: 103.44,
